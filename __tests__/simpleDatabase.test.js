@@ -1,5 +1,5 @@
 import { rm, mkdir } from 'fs/promises';
-import { simpleDb } from '../storedCopies/simpleDatabase';
+import { SimpleDb, SaverClass, GetObjectClass } from '../storedCopies/simpleDatabase';
 
 
 describe('simple databse', () => {
@@ -17,11 +17,35 @@ describe('simple databse', () => {
   });
 
   it('test if saved object has id', () => {
-    const instanceOfObject = new simpleDb(destination);
+    const instanceOfObject = new SimpleDb(destination);
     const simonKaine = { name: 'simon', age: 33 };
 
     return instanceOfObject.save(simonKaine).then(() => {
       expect(simonKaine.id).toEqual(expect.any(String));});
   });
+
+  it('save and get an object', () => {
+    const savedInstance = new SaverClass(destination);
+    const getObjectInstance = new GetObjectClass();
+    const simonKaine = { name: 'simon', age: 33 };
+
+    return savedInstance
+      .save(simonKaine)
+      .then(() => {
+        return getObjectInstance.get();
+      })
+      .then((booger) => {
+        expect(booger).toEqual(simonKaine.id);
+      });
+  });
+
+  it('should return null if no object was returned', () => {
+    const getObjectInstance = new GetObjectClass();
+
+    return getObjectInstance.get().then((booger) => {
+      expect(booger).toBeNull();
+    });
+  });
 });
+
 
