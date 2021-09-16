@@ -1,5 +1,5 @@
 import { rm, mkdir } from 'fs/promises';
-import { SimpleDb, SaverClass, GetObjectClass } from '../storedCopies/simpleDatabase';
+import { SimpleDb } from '../storedCopies/simpleDatabase';
 
 
 describe('simple databse', () => {
@@ -8,7 +8,7 @@ describe('simple databse', () => {
   // test checks for saved object id
   // create object to hold properties that have no id yet
   // save and get an object (one test that saves then gets)
-  // 
+  // when calling can just simpledb.get() + simpleDb.save() etc..
   
   beforeEach(() => {
     return rm(destination, { force: true, recursive: true }).then(() => {
@@ -25,14 +25,13 @@ describe('simple databse', () => {
   });
 
   it('save and get an object', () => {
-    const savedInstance = new SaverClass(destination);
-    const getObjectInstance = new GetObjectClass();
+    const instanceOfObject = new SimpleDb(destination);
     const simonKaine = { name: 'simon', age: 33 };
 
-    return savedInstance
+    return instanceOfObject
       .save(simonKaine)
       .then(() => {
-        return getObjectInstance.get();
+        return instanceOfObject.get(id);
       })
       .then((booger) => {
         expect(booger).toEqual(simonKaine.id);
@@ -40,9 +39,9 @@ describe('simple databse', () => {
   });
 
   it('should return null if no object was returned', () => {
-    const getObjectInstance = new GetObjectClass();
+    const instanceOfObject = new SimpleDb(destination);
 
-    return getObjectInstance.get().then((booger) => {
+    return instanceOfObject.get().then((booger) => {
       expect(booger).toBeNull();
     });
   });
