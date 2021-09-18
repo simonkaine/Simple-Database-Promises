@@ -16,7 +16,7 @@ describe('simple databse', () => {
     });
   });
 
-  it.only('test if saved object has id', () => {
+  it('test if saved object has id', () => {
     const instanceOfObject = new SimpleDb(copiedStores);
     const simonKaine = { name: 'simon', age: 33 };
 
@@ -24,20 +24,19 @@ describe('simple databse', () => {
       expect(simonKaine.id).toEqual(expect.any(String));});
   });
 
-  it('save and get an object', () => {
+  it.only('save and get an object', () => {
     const instanceOfObject = new SimpleDb(copiedStores);
     const simonKaine = { name: 'simon', age: 33 };
-
-    return instanceOfObject
-      .save(simonKaine)
+    
+    return instanceOfObject.save(simonKaine)
       .then(() => {
-        return instanceOfObject.get(id);
+        return instanceOfObject.get(simonKaine.id);
       })
       .then((booger) => {
-        expect(booger).toEqual(simonKaine.id);
+        expect(booger).toEqual(simonKaine);
       });
   });
-
+  
   it('should return null if no object was returned', () => {
     const instanceOfObject = new SimpleDb(copiedStores);
 
@@ -45,6 +44,6 @@ describe('simple databse', () => {
       expect(booger).toBeNull();
     });
   }); 
-});
+}); 
 
 
