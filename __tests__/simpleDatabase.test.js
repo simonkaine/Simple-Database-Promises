@@ -24,7 +24,7 @@ describe('simple databse', () => {
       expect(simonKaine.id).toEqual(expect.any(String));});
   });
 
-  it.only('save and get an object', () => {
+  it('save and get an object', () => {
     const instanceOfObject = new SimpleDb(copiedStores);
     const simonKaine = { name: 'simon', age: 33 };
     
@@ -44,6 +44,31 @@ describe('simple databse', () => {
       expect(booger).toBeNull();
     });
   }); 
+
+  it('should return an array of all the objects', () => {
+    const instanceOfObject = new SimpleDb(copiedStores);
+
+    const simonKaine = { 
+      name: 'simon',
+      age: 33
+    };
+    const kota = { 
+      name: 'kota',
+      age: 9
+    };
+
+    return instanceOfObject
+      .save(simonKaine)
+      .then(() => {
+        instanceOfObject.save(kota);
+      })
+      .then(() => {
+        return instanceOfObject.getAll();
+      })
+      .then((objects) => {
+        expect(objects).toEqual(expect.arrayContaining([simonKaine, kota]));
+      });
+  });
 }); 
 
 
