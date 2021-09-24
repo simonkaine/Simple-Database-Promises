@@ -1,5 +1,5 @@
 import { readFile } from 'fs/promises';
-import { writeFile } from 'fs/promises';
+import { writeFile, readdir } from 'fs/promises';
 import path from 'path';
 import shortid from 'shortid';
 
@@ -43,6 +43,23 @@ export class SimpleDb {
       }
       throw err;
     });
+  }
+  // Returns an array of all the objects in the directory, 
+  // deserialized from the corresponding files in the directory.
+  getAll() {
+    return readdir(this.copiedStores).then((files) => { 
+      return files.map((file) => 
+        path.basename(file, '.json')
+      );
+    })
+      .then((family) => {
+        return Promise.all(
+          family.map((member) => {
+            console.log('family member', member);
+            return this.get(member);
+          })
+        );
+      });
   }
 }
 
